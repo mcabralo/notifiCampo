@@ -20,5 +20,8 @@
   "bugs": {
     "url": "https://github.com/mcabralo/notifiCampo/issues"
   },
-  "homepage": "https://github.com/mcabralo/notifiCampo#readme"
+  "homepage": "https://github.com/mcabralo/notifiCampo#readme",
+  "dependencies": {
+    "nodemon": "^2.0.19"
+  }
 }
