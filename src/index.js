@@ -2,7 +2,7 @@ const { Client, LocalAuth, List, Buttons } = require('whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
 
 const { GoogleSpreadsheet } = require('google-spreadsheet');
-const credentials = require('../credentials.json');
+// const credentials = require('../credentials.json');
 
 const moment = require('moment');
 
@@ -27,11 +27,11 @@ client.on('message', async (message) => {
 });
 
 async function getDoc() {
-  const doc = new GoogleSpreadsheet(credentials.sheetId);
+  const doc = new GoogleSpreadsheet(process.env.sheetId);
 
   await doc.useServiceAccountAuth({
-    client_email: credentials.client_email,
-    private_key: credentials.private_key.replace(/\\n/g, '\n'),
+    client_email: process.env.client_email,
+    private_key: process.env.private_key.replace(/\\n/g, '\n'),
   });
   await doc.loadInfo();
   return await doc;
