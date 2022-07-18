@@ -23,8 +23,10 @@
   },
   "homepage": "https://github.com/mcabralo/notifiCampo#readme",
   "dependencies": {
+    "moment": "^2.29.4",
     "nodemon": "^2.0.19",
     "qrcode-terminal": "^0.12.0",
+    "sheetdb-node": "0.0.12",
     "whatsapp-web.js": "^1.17.1"
   }
 }
