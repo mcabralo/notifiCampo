@@ -2,7 +2,7 @@ const { Client, LocalAuth, List, Buttons } = require('whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
 
 const { GoogleSpreadsheet } = require('google-spreadsheet');
-// const credentials = require('../credentials.json');
+const credentials = require('../credentials.json');
 
 const moment = require('moment');
 
@@ -27,18 +27,18 @@ client.on('message', async (message) => {
 });
 
 async function getDoc() {
-  const doc = new GoogleSpreadsheet(process.env.sheetId);
+  const doc = new GoogleSpreadsheet(credentials.sheetId);
 
   await doc.useServiceAccountAuth({
-    client_email: process.env.client_email,
-    private_key: process.env.private_key.replace(/\\n/g, '\n'),
+    client_email: credentials.client_email,
+    private_key: credentials.private_key.replace(/\\n/gm, '\n'),
   });
   await doc.loadInfo();
   return await doc;
 }
 
-// const data = moment().add(1, 'days').format('DD-MM-YY');
-const data = moment().format('DD-MM-YY');
+const data = moment().add(1, 'days').format('DD-MM-YY');
+// const data = moment().format('DD-MM-YY');
 console.log(data);
 let listaNotificampo;
 let rowsMapped;
@@ -68,8 +68,8 @@ let lista = getDoc().then(async (doc) => {
 });
 
 lista.then((rowsMapped) => {
-  // if (moment().format('LT') == '09:00') {
-  if (true) {
+  if (moment().format('LT') == '09:00') {
+  // if (true) {
     for (let i = 0; i < rowsMapped.length; i++) {
       sendMessage(rowsMapped[i]);
     }

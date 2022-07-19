@@ -1,5 +1,5 @@
 node_modules
-./tokens
 .wwebjs_auth
 _IGNORE_session
+.env
 credentials.json
