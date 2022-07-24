@@ -68,8 +68,8 @@ let lista = getDoc().then(async (doc) => {
 });
 
 lista.then((rowsMapped) => {
-  if (moment().format('LT') == '09:00') {
-  // if (true) {
+  // if (moment().format('LT') == '09:00') {
+  if (true) {
     for (let i = 0; i < rowsMapped.length; i++) {
       sendMessage(rowsMapped[i]);
     }
@@ -81,7 +81,7 @@ async function sendMessage(contato) {
   client.on('ready', () => {
     console.log('Sending Message!');
     try {
-      msgOperador(contato);
+      // msgOperador(contato);
     } catch (error) {
       console.error(error);
     }

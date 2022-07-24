@@ -2,4 +2,3 @@ node_modules
 .wwebjs_auth
 _IGNORE_session
 .env
-credentials.json
