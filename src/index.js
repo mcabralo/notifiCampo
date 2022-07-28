@@ -17,31 +17,24 @@ client.on('qr', (qr) => {
 });
 
 client.initialize();
-
-client.on('message', async (message) => {
-  if (message.body === 'a') {
-    console.log('MESSAGE RECEIVED', message);
-    let button = new Buttons();
-    client.sendMessage(message.from, button);
-  }
-});
+console.log('Aplicação iniciada');
 
 async function getDoc() {
   const doc = new GoogleSpreadsheet(credentials.sheetId);
 
   await doc.useServiceAccountAuth({
     client_email: credentials.client_email,
-    private_key: credentials.private_key.replace(/\\n/g, '\n'),
+    private_key: credentials.private_key.replace(/\\n/gm, '\n'),
   });
   await doc.loadInfo();
   return await doc;
 }
+console.log('Conexão com planilha estabelecida');
 
 // const data = moment().add(1, 'days').format('DD-MM-YY');
 const data = moment().format('DD-MM-YY');
-console.log(data);
-let listaNotificampo;
-let rowsMapped;
+console.log('Data considerada: ', data);
+let listaNotificampo, rowsMapped;
 
 function getActualDate(val) {
   return val.data == data;
@@ -66,10 +59,14 @@ let lista = getDoc().then(async (doc) => {
   });
   return rowsMapped;
 });
+console.log('Lista de designações gerada');
 
 lista.then((rowsMapped) => {
-  // if (moment().format('LT') == '09:00') {
-  if (true) {
+  console.log('Lista mapeada');
+  console.log(moment().format('LT'))
+  console.log(moment().format('LT') == '7:49 PM')
+  if (moment().format('LT') == '9:00 AM') {
+  // if (true) {
     for (let i = 0; i < rowsMapped.length; i++) {
       sendMessage(rowsMapped[i]);
     }
@@ -79,9 +76,10 @@ lista.then((rowsMapped) => {
 
 async function sendMessage(contato) {
   client.on('ready', () => {
-    console.log('Sending Message!');
+    // console.log('Sending Message!');
     try {
-      msgOperador(contato);
+      // msgOperador(contato);
+      console.log(`Enviando mensagem para ${contato.nome}, o ${contato.atv}`);
     } catch (error) {
       console.error(error);
     }
@@ -89,6 +87,7 @@ async function sendMessage(contato) {
 }
 
 async function msgOperador(contato) {
+  console.log('Mensagem enviada');
   return client.sendMessage(
     `${contato.telefone}@c.us`,
     `Olá ${contato.nome}, bom dia mano! Esta é uma mensagem automática para lembrar que o irmão será o ${contato.atv} amanhã, ${contato.data} às ${contato.hora}! 
