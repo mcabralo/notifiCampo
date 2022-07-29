@@ -8,6 +8,10 @@ const moment = require('moment');
 
 const nodeSchedule = require('node-schedule');
 
+const browser = await puppeteer.launch({
+  args: ['--no-sandbox', '--disable-setuid-sandbox'],
+});
+
 const job = nodeSchedule.scheduleJob('0 9 * * *', () => {
   // /** API WHATSAPP */,
 
