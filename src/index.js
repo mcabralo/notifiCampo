@@ -10,7 +10,7 @@ const nodeSchedule = require('node-schedule');
 
 const puppeteer = require('puppeteer');
 
-const browser = await puppeteer.launch({
+const browser = puppeteer.launch({
   args: ['--no-sandbox', '--disable-setuid-sandbox'],
 });
 
