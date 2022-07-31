@@ -14,6 +14,7 @@ const browser = puppeteer.launch({
   args: ['--no-sandbox', '--disable-setuid-sandbox'],
 });
 
+console.info('Aplicação Iniciada');
 const job = nodeSchedule.scheduleJob('0 9 * * *', () => {
   // /** API WHATSAPP */,
 
