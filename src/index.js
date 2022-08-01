@@ -23,7 +23,9 @@ console.info('Aplicação Iniciada');
 
 const client = new Client({
   authStrategy: new LocalAuth(),
-  args: ['--no-sandbox', '--disable-setuid-sandbox'],
+  puppeteer: {
+    args: ['--no-sandbox', '--disable-setuid-sandbox'],
+  },
 });
 
 client.on('qr', (qr) => {
