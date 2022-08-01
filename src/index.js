@@ -17,16 +17,13 @@ const app = express();
 const port = process.env.PORT || 6598;
 app.listen(port, () => console.log(`Servidor iniciado na porta ${port}`));
 
-puppeteer.launch({
-  args: ['--no-sandbox', '--disable-setuid-sandbox'],
-});
-
 console.info('Aplicação Iniciada');
 // const job = nodeSchedule.scheduleJob('0 9 * * *', () => {
 // /** API WHATSAPP */,
 
 const client = new Client({
   authStrategy: new LocalAuth(),
+  args: ['--no-sandbox', '--disable-setuid-sandbox'],
 });
 
 client.on('qr', (qr) => {
