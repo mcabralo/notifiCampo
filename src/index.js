@@ -17,7 +17,7 @@ const app = express();
 const port = process.env.PORT || 6598;
 app.listen(port, () => console.log(`Servidor iniciado na porta ${port}`));
 
-const browser = puppeteer.launch({
+puppeteer.launch({
   args: ['--no-sandbox', '--disable-setuid-sandbox'],
 });
 
