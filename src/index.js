@@ -1,4 +1,5 @@
-const { Client, LocalAuth, List, Buttons } = require('whatsapp-web.js');
+// const { Client, LocalAuth, List, Buttons } = require('whatsapp-web.js');
+const { Whatsapp } = require('./class/Whatsapp');
 const qrcode = require('qrcode-terminal');
 
 const { GoogleSpreadsheet } = require('google-spreadsheet');
@@ -6,12 +7,7 @@ const credentials = require('../credentials.json');
 
 const moment = require('moment');
 
-const nodeSchedule = require('node-schedule');
-
-const puppeteer = require('puppeteer');
-
 const express = require('express');
-const router = express.Router();
 const app = express();
 
 const port = process.env.PORT || 6598;
@@ -21,12 +17,14 @@ console.info('Aplicação Iniciada');
 // const job = nodeSchedule.scheduleJob('0 9 * * *', () => {
 // /** API WHATSAPP */,
 
-const client = new Client({
-  authStrategy: new LocalAuth(),
-  puppeteer: {
-    args: ['--no-sandbox', '--disable-setuid-sandbox'],
-  },
-});
+// const client = new Client({
+//   authStrategy: new LocalAuth(),
+//   puppeteer: {
+//     args: ['--no-sandbox', '--disable-setuid-sandbox'],
+//   },
+// });
+
+const client = new Whatsapp();
 
 client.on('qr', (qr) => {
   qrcode.generate(qr, { small: true });
