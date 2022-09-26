@@ -1,106 +1,99 @@
-const { Client, LocalAuth, List, Buttons } = require('whatsapp-web.js');
-const qrcode = require('qrcode-terminal');
+// Declaração de Constantes
+const Whatsapp = require('./class/Whatsapp.js');
+const Sender = require('./class/Sender.js');
+const Sheet = require('./class/Sheet.js');
+const Server = require('./class/Server.js');
+const Logger = require('./class/Logger.js');
 
-const { GoogleSpreadsheet } = require('google-spreadsheet');
-const credentials = require('../credentials.json');
+// const job = nodeSchedule.scheduleJob('0 9 * * *', () => {
+// /** API WHATSAPP */,
 
-const moment = require('moment');
+// Instância de Classes
+new Server();
+let log = new Logger();
+let client = new Whatsapp();
+let sender = new Sender();
+let sheet = new Sheet();
+let rowsMappedCarrinho;
 
-const nodeSchedule = require('node-schedule');
+log.info('Classes Instanciadas');
 
-const browser = await puppeteer.launch({
-  args: ['--no-sandbox', '--disable-setuid-sandbox'],
-});
+client.initialize();
 
-const job = nodeSchedule.scheduleJob('0 9 * * *', () => {
-  // /** API WHATSAPP */,
+log.info('Aplicação iniciada');
 
-  const client = new Client({
-    authStrategy: new LocalAuth(),
-  });
+log.info('Data considerada: ' + sheet.getDate());
 
-  client.on('qr', (qr) => {
-    qrcode.generate(qr, { small: true });
-  });
+// let lista = sheet.getDoc();
 
-  client.initialize();
-  console.log('Aplicação iniciada');
+// console.log({ lista });
 
-  async function getDoc() {
-    const doc = new GoogleSpreadsheet(credentials.sheetId);
+let lista = sheet.getDesignacoes().then(async (doc) => {
+  planilha = doc.sheetsByTitle['Api'];
+  rowsMapped = await planilha.getRows().then(async (rows) => {
+    rowsMapped = rows
+      .map((row) => ({
+        ['data']: row.Data,
+        ['nome']: row.Nome,
+        ['atv']: row.Atv,
+        ['telefone']: row.Tel,
+        ['hora']: row.Hora,
+        ['territorio']: row.Terr ? row.Terr : ''
+      }))
+      .filter(sheet.getActualDate);
 
-    await doc.useServiceAccountAuth({
-      client_email: credentials.client_email,
-      private_key: credentials.private_key.replace(/\\n/gm, '\n'),
-    });
-    await doc.loadInfo();
-    return await doc;
-  }
-  console.log('Conexão com planilha estabelecida');
+    listaNotificampo = rowsMapped;
 
-  const data = moment().add(1, 'days').format('DD-MM-YY');
-  // const data = moment().format('DD-MM-YY');
-  console.log('Data considerada: ', data);
-  let listaNotificampo, rowsMapped;
-
-  function getActualDate(val) {
-    return val.data == data;
-  }
-
-  let lista = getDoc().then(async (doc) => {
-    sheet = doc.sheetsByIndex[0];
-    rowsMapped = await sheet.getRows().then(async (rows) => {
-      rowsMapped = rows
-        .map((row) => ({
-          ['data']: row.Data,
-          ['nome']: row.Nome,
-          ['atv']: row.Atv,
-          ['telefone']: row.Tel,
-          ['hora']: row.Hora,
-        }))
-        .filter(getActualDate);
-
-      listaNotificampo = rowsMapped;
-
-      return rowsMapped;
-    });
     return rowsMapped;
   });
-  console.log('Lista de designações gerada');
-
-  lista.then((rowsMapped) => {
-    console.log('Lista mapeada');
-    // console.log(moment().format('LT'));
-    // console.log(moment().format('LT') == '7:49 PM');
-    // if (moment().format('LT') == '9:00 AM') {
-    if (true) {
-      for (let i = 0; i < rowsMapped.length; i++) {
-        sendMessage(rowsMapped[i]);
-      }
-    }
-    // console.log({ rowsMapped });
-  });
-
-  async function sendMessage(contato) {
-    client.on('ready', () => {
-      // console.log('Sending Message!');
-      try {
-        msgOperador(contato);
-        console.log(`Enviando mensagem para ${contato.nome}, o ${contato.atv}`);
-      } catch (error) {
-        console.error(error);
-      }
-    });
-  }
-
-  async function msgOperador(contato) {
-    console.log('Mensagem enviada');
-    return client.sendMessage(
-      `${contato.telefone}@c.us`,
-      `Olá ${contato.nome}, bom dia mano! Esta é uma mensagem automática para lembrar que o irmão será o ${contato.atv} amanhã, ${contato.data} às ${contato.hora}! 
-    
-    Caso não possa assumir, favor contatar Matheus (71 99486598) que ele irá providenciar um substituto!`
-    );
-  }
+  return rowsMapped;
 });
-// console.log({ job });
+log.info('Lista de designações gerada');
+
+lista.then((rowsMapped) => {
+  log.info('Lista mapeada');
+  // console.log({rowsMapped});
+  // if (moment().format('LT') == '9:00 AM') {
+  if (true) {
+    for (let i = 0; i < rowsMapped.length; i++) {
+      sender.sendMessage(rowsMapped[i], client, log);
+    }
+  }
+  // console.log({ rowsMapped });
+});
+// }
+
+let listaCarrinho = sheet.getCarrinho().then(async (doc) => {
+  planilhaCarrinho = doc.sheetsByTitle['ApiTpl'];
+  rowsMappedCarrinho = await planilhaCarrinho.getRows().then(async (rows) => {
+    rowsMappedCarrinho = rows
+      .map((row) => ({
+        ['data']: row.Data,
+        ['local']: row.Local,
+        ['hora']: row.Hora,
+        ['d1']: row.Designado_1,
+        ['t1']: row.Tel_Designado_1,
+        ['d1']: row.Designado_1,
+        ['d2']: row.Designado_2,
+        ['t2']: row.Tel_Designado_2,
+      }))
+      .filter(sheet.getActualWeek);
+
+      // console.log({ rowsMappedCarrinho });
+    return rowsMappedCarrinho;
+  });
+  return rowsMappedCarrinho;
+});
+
+listaCarrinho.then((rowsMappedCarrinho) => {
+  log.info('Lista mapeada Carrinho');
+  // if (moment().format('LT') == '9:00 AM') {
+  if (true) {
+    for (let i = 0; i < rowsMappedCarrinho.length; i++) {
+      sender.sendMessage(rowsMappedCarrinho[i], client, log);
+    }
+  }
+  // console.log({ rowsMappedCarrinho });
+});
+
+// }
