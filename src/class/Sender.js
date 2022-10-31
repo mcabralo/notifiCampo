@@ -6,22 +6,22 @@ let sheet = new Sheet();
 module.exports = class Sender {
   async sendMessage(contato, client) {
     client.on('ready', () => {
-      // console.log('Sending Message!');
+      console.log('Sending Message!');
       try {
         if (contato.atv) {
           //TODO -> Incluir validação para Campo e TPE
-          this.msgCampo(contato, client);
+          // this.msgCampo(contato, client);
           log.info(`Enviando mensagem para ${contato.nome}, o ${contato.atv}`);
         } else {
-          // console.log(sheet.getWeek());
-          if (sheet.getWeek() == '1') {
+          console.log(sheet.getWeek());
+          if (sheet.getWeek() == '5') {
             // console.log({ contato });
             this.msgCarrinho(contato, client);
             log.info(`Enviando mensagem para ${contato.d1} e ${contato.d2}`);
           }
           if (sheet.getWeek() == '5') {
             // console.log({ contato });
-            this.msgCarrinhoLembrete(contato, client);
+            // this.msgCarrinhoLembrete(contato, client);
             log.info(`Enviando mensagem para ${contato.d1} e ${contato.d2}`);
           }
         }
@@ -58,7 +58,7 @@ Link para as designações: https://sites.google.com/view/cong-paraiso/campo?aut
     client.sendMessage(
       `${contato.t1}@c.us`,
       `Olá ${contato.d1}, bom dia! Esta é uma mensagem automática para informar que tem uma designação de TPL. No *${contato.local}*, *${contato.hora}*, dia *${contato.data}* com *${contato.d2}*!
-Caso não possa assumir, favor contatar diretamente o rimão Julio (11 940424104) que ele irá providenciar um substituto! Pedimos também que _não responda por este contato, sua mensagem pode ser perdida_.
+Caso não possa assumir, favor contatar diretamente o irmão Júlio (11 940424104) que ele irá providenciar um substituto! Pedimos também que _não responda por este contato, sua mensagem pode ser perdida_. Caso não irá assumir a designação e já tiver conversado com o irmão Júlio, pode desconsiderar essa mensagem.
       
 Link para as designações: https://sites.google.com/view/cong-paraiso/campo?authuser=0#h.iarv2rg3ftb9`
     );
@@ -72,6 +72,7 @@ Caso não possa assumir, favor contatar diretamente o rimão Julio (11 940424104
 Link para as designações: https://sites.google.com/view/cong-paraiso/campo?authuser=0#h.iarv2rg3ftb9`
     );
   }
+
   async msgCarrinhoLembrete(contato, client) {
     log.info('Mensagem enviada ' + contato.d1);
     client.sendMessage(
@@ -83,5 +84,30 @@ Link para as designações: https://sites.google.com/view/cong-paraiso/campo?aut
       `${contato.t2}@c.us`,
       `Olá ${contato.d2}, bom dia! Este é um lembrete que tem uma designação de TPL. No *${contato.local}*, *${contato.hora}*, dia *${contato.data}* com *${contato.d1}*!`
     );
+  }
+
+  async msgCarrinhoLembreteAdapt(contato, client) {
+    if (contato.data == '01-10-22') {
+      log.info('Mensagem enviada ' + contato.d1);
+      client.sendMessage(
+        `${contato.t1}@c.us`,
+        `Olá ${contato.d1}, bom dia! Este é um lembrete que tem uma designação de TPL. No *${contato.local}*, *${contato.hora}*, dia *${contato.data}* com *${contato.d2}*!`
+      );
+      log.info('Mensagem enviada ' + contato.d2);
+      client.sendMessage(
+        `${contato.t2}@c.us`,
+        `Olá ${contato.d2}, bom dia! Este é um lembrete que tem uma designação de TPL. No *${contato.local}*, *${contato.hora}*, dia *${contato.data}* com *${contato.d1}*!`
+      );
+    } else if (contato.data == '02-10-22') {
+      client.sendMessage(
+        `${contato.t1}@c.us`,
+        `Olá ${contato.d1}, bom dia! No dia *${contato.data}* não teremos carrinho em virtude da eleição. Por favor desconsidere a designação enviada anteriormente.`
+      );
+      log.info('Mensagem enviada ' + contato.d2);
+      client.sendMessage(
+        `${contato.t2}@c.us`,
+        `Olá ${contato.d2}, bom dia! No dia *${contato.data}* não teremos carrinho em virtude da eleição. Por favor desconsidere a designação enviada anteriormente.`
+      );
+    }
   }
 };
