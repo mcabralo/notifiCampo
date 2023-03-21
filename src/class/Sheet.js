@@ -45,13 +45,19 @@ module.exports = class Sheet {
   }
 
   getActualWeek(val) {
+    // let hoje = moment().add(1, 'days', 'DD-MM-YY')
     let hoje = moment().add(1, 'days').format('DD-MM-YY');
   //   let hoje = moment().add(6, 'days').format('DD-MM-YY');
-   dataFimSemana = moment().add(7, 'days').format('DD-MM-YY');
-    // dataFimSemana = moment().add(4, 'days').format('DD-MM-YY');
+  //  dataFimSemana = moment().add(7, 'days', 'DD-MM-YY');
+    dataFimSemana = moment().add(7, 'days').format('DD-MM-YY');
     // console.log(hoje, val.data, dataFimSemana);
     // console.log(val.data ? val.data >= hoje && val.data <= dataFimSemana : "");
-    // console.log({val});
+
+    // console.log(val.data ? dataFimSemana.diff(hoje, "days") : "")
+
+    // return val.data ? hoje.diff(dataFimSemana)
+
+    // console.log(val.data ? val.data >= hoje && val.data <= dataFimSemana : "")
 
     return val.data ? val.data >= hoje && val.data <= dataFimSemana : ""
   }

@@ -5,9 +5,9 @@ let date;
 module.exports = class Logger {
   constructor() {
     appName = '[Notificampo] - ';
-    date = moment().format();
   }
   info(message) {
+    date = moment().format();
     console.log(`${appName}${date}: ${message}`);
   }
 };

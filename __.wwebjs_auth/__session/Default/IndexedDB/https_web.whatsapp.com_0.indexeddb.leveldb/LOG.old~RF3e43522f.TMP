@@ -1,0 +1,28 @@
+2022/08/02-11:11:54.950 61ec Reusing MANIFEST C:\Users\matheus.oliveira\Projetos\Pessoal\Javascript\NodeJs\nofitiCampo\.wwebjs_auth\session\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/MANIFEST-000001
+2022/08/02-11:11:54.963 61ec Recovering log #560
+2022/08/02-11:11:55.508 61ec Reusing old log C:\Users\matheus.oliveira\Projetos\Pessoal\Javascript\NodeJs\nofitiCampo\.wwebjs_auth\session\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/000560.log 
+2022/08/02-11:12:07.052 3e04 Level-0 table #573: started
+2022/08/02-11:12:07.089 3e04 Level-0 table #573: 1286534 bytes OK
+2022/08/02-11:12:07.092 3e04 Delete type=0 #560
+2022/08/02-11:12:07.455 9e0 Compacting 1@1 + 9@2 files
+2022/08/02-11:12:07.614 9e0 Generated table #574@1: 32298 keys, 2259073 bytes
+2022/08/02-11:12:07.738 9e0 Generated table #575@1: 25429 keys, 2278449 bytes
+2022/08/02-11:12:07.991 9e0 Generated table #576@1: 25697 keys, 2278397 bytes
+2022/08/02-11:12:08.318 9e0 Generated table #577@1: 27250 keys, 2284301 bytes
+2022/08/02-11:12:08.475 9e0 Generated table #578@1: 24944 keys, 2277025 bytes
+2022/08/02-11:12:08.648 9e0 Generated table #579@1: 24374 keys, 2286624 bytes
+2022/08/02-11:12:08.934 9e0 Generated table #580@1: 91530 keys, 2253990 bytes
+2022/08/02-11:12:09.180 9e0 Generated table #581@1: 72734 keys, 2239132 bytes
+2022/08/02-11:12:09.250 9e0 Generated table #582@1: 10068 keys, 1030948 bytes
+2022/08/02-11:12:09.250 9e0 Compacted 1@1 + 9@2 files => 19187939 bytes
+2022/08/02-11:12:09.252 9e0 compacted to: files[ 0 0 10 0 0 0 0 ]
+2022/08/02-11:12:09.253 9e0 Delete type=2 #562
+2022/08/02-11:12:09.253 9e0 Delete type=2 #563
+2022/08/02-11:12:09.253 9e0 Delete type=2 #564
+2022/08/02-11:12:09.253 9e0 Delete type=2 #565
+2022/08/02-11:12:09.253 9e0 Delete type=2 #566
+2022/08/02-11:12:09.254 9e0 Delete type=2 #567
+2022/08/02-11:12:09.254 9e0 Delete type=2 #568
+2022/08/02-11:12:09.254 9e0 Delete type=2 #569
+2022/08/02-11:12:09.254 9e0 Delete type=2 #570
+2022/08/02-11:12:09.254 9e0 Delete type=2 #573

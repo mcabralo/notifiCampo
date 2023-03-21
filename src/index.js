@@ -4,6 +4,7 @@ const Sender = require('./class/Sender.js');
 const Sheet = require('./class/Sheet.js');
 const Server = require('./class/Server.js');
 const Logger = require('./class/Logger.js');
+const moment = require('moment');
 
 // const job = nodeSchedule.npm('0 9 * * *', () => {
 // /** API WHATSAPP */,
@@ -14,7 +15,7 @@ let log = new Logger();
 let client = new Whatsapp();
 let sender = new Sender();
 let sheet = new Sheet();
-let rowsMappedCarrinho;
+let rowsMappedCarrinho, lista;
 
 log.info('Classes Instanciadas');
 
@@ -28,27 +29,57 @@ log.info('Data considerada: ' + sheet.getDate());
 
 // console.log({ lista });
 
-let lista = sheet.getDesignacoes().then(async (doc) => {
-  planilha = doc.sheetsByTitle['Api'];
-  rowsMapped = await planilha.getRows().then(async (rows) => {
-    rowsMapped = rows
-      .map((row) => ({
-        ['data']: row.Data,
-        ['nome']: row.Nome,
-        ['atv']: row.Atv,
-        ['telefone']: row.Tel,
-        ['hora']: row.Hora,
-        ['territorio']: row.Terr ? row.Terr : ''
-      }))
-      .filter(sheet.getActualDate);
+console.log(moment().isoWeekday());
+switch (moment().isoWeekday()) {
+  case 1:
+    lista = sheet.getDesignacoes().then(async (doc) => {
+      planilha = doc.sheetsByTitle['Api'];
+      rowsMapped = await planilha.getRows().then(async (rows) => {
+        rowsMapped = rows
+          .map((row) => ({
+            ['data']: row.Data,
+            ['nome']: row.Nome,
+            ['atv']: row.Atv,
+            ['telefone']: row.Tel,
+            ['hora']: row.Hora,
+            ['territorio']: row.Terr ? row.Terr : '',
+          }))
+          .filter(sheet.getActualWeek);
+        // .filter(sheet.getActualDate);
 
-    listaNotificampo = rowsMapped;
-    // console.log(listaNotificampo);
+        listaNotificampo = rowsMapped;
+        console.log(listaNotificampo);
 
-    return rowsMapped;
-  });
-  return rowsMapped;
-});
+        return rowsMapped;
+      });
+      return rowsMapped;
+    });
+    break;
+  default:
+    lista = sheet.getDesignacoes().then(async (doc) => {
+      planilha = doc.sheetsByTitle['Api'];
+      rowsMapped = await planilha.getRows().then(async (rows) => {
+        rowsMapped = rows
+          .map((row) => ({
+            ['data']: row.Data,
+            ['nome']: row.Nome,
+            ['atv']: row.Atv,
+            ['telefone']: row.Tel,
+            ['hora']: row.Hora,
+            ['territorio']: row.Terr ? row.Terr : '',
+          }))
+          .filter(sheet.getActualDate);
+
+        listaNotificampo = rowsMapped;
+        console.log(rowsMapped);
+
+        return rowsMapped;
+      });
+      return rowsMapped;
+    });
+    break;
+}
+
 log.info('Lista de designações gerada');
 
 lista.then((rowsMapped) => {
@@ -67,19 +98,19 @@ let listaCarrinho = sheet.getCarrinho().then(async (doc) => {
   planilhaCarrinho = doc.sheetsByTitle['ApiTpl'];
   rowsMappedCarrinho = await planilhaCarrinho.getRows().then(async (rows) => {
     rowsMappedCarrinho = rows
-    .map((row) => ({
-      ['data']: row.Data,
-      ['local']: row.Local,
-      ['hora']: row.Hora,
-      ['d1']: row.Designado_1,
-      ['t1']: row.Tel_Designado_1,
-      ['d1']: row.Designado_1,
-      ['d2']: row.Designado_2,
-      ['t2']: row.Tel_Designado_2,
-    }))
-    .filter(sheet.getActualWeek);
+      .map((row) => ({
+        ['data']: row.Data,
+        ['local']: row.Local,
+        ['hora']: row.Hora,
+        ['d1']: row.Designado_1,
+        ['t1']: row.Tel_Designado_1,
+        ['d1']: row.Designado_1,
+        ['d2']: row.Designado_2,
+        ['t2']: row.Tel_Designado_2,
+      }))
+      .filter(sheet.getActualWeek);
 
-      // console.log({ rowsMappedCarrinho });
+    console.log({ rowsMappedCarrinho });
     return rowsMappedCarrinho;
   });
   return rowsMappedCarrinho;
